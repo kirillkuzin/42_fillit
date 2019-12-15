@@ -1,29 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   tetromino.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ggeordi <ggeordi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/12/15 15:55:46 by ggeordi           #+#    #+#             */
-/*   Updated: 2019/12/15 21:17:52 by ggeordi          ###   ########.fr       */
+/*   Created: 2019/12/15 20:15:27 by ggeordi           #+#    #+#             */
+/*   Updated: 2019/12/15 21:14:58 by ggeordi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fillit.h"
 
-int		main(int argc, char **argv)
+t_tetromino		*new_tetromino()
 {
-	int			fd;
-	int			amount_of_tetrominoes;
-	t_list		**tetrominoes;
+	t_tetromino		*tetromino;
+	int				i;
 
-	amount_of_tetrominoes = 0;
-	fd = open(argv[1], O_RDONLY);
-	if (fd == -1)
-		return (-1);
-	tetrominoes = read_tetrominoes(fd, &amount_of_tetrominoes);
-	close(fd);
-	ft_lstiter(*tetrominoes, write_tetromino);
-	return (0);
+	i = 0;
+	if (!(tetromino = (t_tetromino*)malloc(sizeof(t_tetromino))))
+		return (NULL);
+	tetromino->body = (char**)malloc(sizeof(char*) * 5);
+	while (i < 4)
+	{
+		tetromino->body[i] = (char*)malloc(sizeof(char) * 5);
+		tetromino->body[i][4] = '\0';
+		i++;
+	}
+	return (tetromino);
+}
+
+void		free_tetromino(void *tetromino, size_t tetromino_size)
+{
+
 }
