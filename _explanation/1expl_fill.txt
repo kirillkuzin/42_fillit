@@ -1,0 +1,189 @@
+from pbondoer
+
+the structure describes which functions are called in the program (except for lbft functions which are inside of original functions) and in what file it is (if not specified - it is in upper level function)
+the numeration shows the depth of function (for example - 1.1.1 chech_counts is in 1.1 read_tetri, which is in 1. main)
+
+1 Main (main.c)
+
+1.1 read_tetri (reader.c)
+	1.1.1 chech_counts
+		1.1.1.1 check_connection
+	1.1.2 get piece 
+		1.1.2.1 point-new (tetrimino.c) 
+		1.1.2.2 min-max 
+		1.1.2.3 tetris-new (tetrimino.c) 
+	1.1.3 free-list (tetrimino.c) 
+		1.1.3.1 free-tetris 
+
+1.2 solve (solver.c)
+	1.2.1 high-sqrt
+	1.2.2 map-new (map.c)
+	1.2.3 solve-map 
+		1.2.3.1 place (map.c)
+			1.2.3.1.1 set-piece 
+			1.2.3.1.2 point-new (tetrimino.c)
+		1.2.3.2 solve-map 
+		1.2.3.3 set-piece 
+		1.2.3.4 point-new (tetrimino.c) 
+	1.2.4 free-map (map.c)
+	1.2.5 map-new 
+
+1.3 print-map (map.c)
+
+1.4 free-map (map.c)
+
+1.5 free-list (tetrimino.c)
+	1.5.1 free-tetris
+######################################################
+
+################### 1 - reading part ######################
+1.1 read_tetri (reader.c)
+
+# reads input, checks if it is a tetrimino and if its ok - put it in a list
+
+1 - create buffer with a new string (ft_strnew)
+2 - while read is more than 20:
+2.1 if check_counts != 0 or get_piece == NULL
+2.1.1 ft_memdel & return free_list
+2.2 ft_lstadd(&list, ft_lstnew,)
+2.3 ft_memdel
+3 ft_memdel
+4 if read != 0 => return free_list
+5 ft_strrev
+return list
+
+################# READ ISN'T FINISHED
+
+i didn't finished describing, because you were writing this part by yourself)
+
+what we should do in the read part 
+	read input, 
+	check if it is a tetrimino, 
+	than add valid tetrimino to the list (if even one is invalid - error, exit program)
+
+the result, that we should get in the read part:
+	list of valid tetriminoes
+##################
+########################
+
+######################## 2 - solving part ##########################
+____________________
+What we do here:
+	get a list of valid tetriminoes
+	find the smallest square (with recursion)
+	return a map - structure with tetriminoes eache element of what has coordinates and replaced by letter already
+______________________
+
+how to find a smallest square: we get the size of the smallest possible square (just amount of elements, for example for two pieces - its 4*4, like two "sticks")
+if we can fit  two sticks in 4*4 square - we solved the task
+if not - we increase the size of the square - 5*5 - and so on
+
+the process of filling:
+
+
+1.2 solve (gets t_list with pieces - tetriminoes, which are checked and put to list in the read part)
+1 - find smallest square
+
+1.2.1 high-sqrt
+high_sqrt(int n)
+gets the size of the list (how many tetriminoes are there)
+
+Find the rounded up sqrt of a number. Equivalent to ceil(sqrt(n)).
+	size = 2 
+	while (size * size < n) - 
+		increase size
+	return (size)
+
+
+size = high_sqrt(ft_lstcount(list) * 4);
+
+1.2.2 map_new
+# create a map with size ^
+
+
+1.2.3 solve-map (gets map and t_list)
+1 - if you can't solve map - increase size (bigger square); free previous map and create new with a bigger size; repeate untill succeed
+
+2 - create new tetri with content of the incoming list
+3 create counter y (height) and x (width)
+while counter y  is less than size of map - height of tetri + 1
+	while counter x less than size of map - width of tetri + 1
+		if (place(tetri, map, x, y)) - if you can place it 
+			if ok - call recursion of solve_map with next element of list and return 1
+			else - set_piece (fill it with '.') - not ok
+		else - increase counter x (width of tetri)
+	increase counter y (length of tetri)
+
+1.2.3.1 place (map.c)
+gets tetri, map, x(width) and y(length)
+create two counters 
+i - width
+j - height
+	while (i is less than the width of tetri)
+		while (j is less than the height of tetri)
+			if (the element of tetri at the position == '#' and the element on the map is not empty (not '.') -> return 0
+			else increase height)
+	increase width
+
+set_piece(tetri, map, point_new(x, y), tetri->value (letter))
+
+1.2.3.1.1 set-piece
+gets tetri, map, point at map, and letter
+create two counters 
+i - width
+j - height
+	while (i is less than the width of tetri)
+		while (j is less than the height of tetri)
+			if (the element of tetri on the position [j][i] == '#')
+				put letter on the map (map->array[point->y + j][point->x + i])
+			else increase height
+	increase width
+delete point
+(no return)
+
+1.2.3.1.2 point-new (tetrimino.c)
+function creates point - where the element of tetrimino is on the map
+gets x (width) and y (height)
+create t_point (structure with ints x and y)
+allocate memory for its size
+set point->x = incoming x
+set point-> = incoming y
+return point (t_point structure)
+
+
+
+1.2.4 free-map (map.c)
+if we couldn't solve the map - tetriminoes didn't fit in a square - we increase the size of the sqare and free current map
+function gets map structure and frees allocates memory
+while size of map is less than counter i - ft_memdel(each element of array in the map) - ft_memdel((void**)&map->array[i])
+ft_memdel((void**)&map->array)
+ft_memdel((void**)&map)
+
+
+1.2.5 map-new 
+create new map with a size bigger than previous
+################################################
+
+
+
+######################## 3 - printing part ###################
+1.3 print-map (map.c)
+we can print our solved map of tetriminoes (there are already letters instead '#' and '.')
+gets structure t_map with tetriminoes (each tetrimino is filled with letter and has its coordinates on the map)
+while size of map is less than counter i, we print each element of the array (map->array[i]) and a newline
+#########################################################
+
+
+
+################### 4 & 5 - freeing part #####################
+1.4 free-map (map.c)
+we free our map for the last time (see desctription of the function above)
+
+
+1.5 free-list (tetrimino.c)
+we free our list of tetriminoes (which we set in the read part) by freeing each element of list (each tetriminoes)
+
+1.5.1 free-tetris
+#######################################################
+
+The enqrt of a number. Equivalent to ceil(sqrt(n)).
