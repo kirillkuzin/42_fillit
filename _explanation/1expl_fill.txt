@@ -1,5 +1,7 @@
 from pbondoer
 
+https://github.com/pbondoer/42-fillit
+
 the structure describes which functions are called in the program (except for lbft functions which are inside of original functions) and in what file it is (if not specified - it is in upper level function)
 the numeration shows the depth of function (for example - 1.1.1 chech_counts is in 1.1 read_tetri, which is in 1. main)
 
@@ -209,4 +211,4 @@ we free our list of tetriminoes (which we set in the read part) by freeing each 
 1.5.1 free-tetris
 #######################################################
 
-The enqrt of a number. Equivalent to ceil(sqrt(n)).
+The end
