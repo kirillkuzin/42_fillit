@@ -63,6 +63,8 @@ what we should do in the read part
 
 the result, that we should get in the read part:
 	list of valid tetriminoes
+	each element is a structure, that contains: pos (pointer to array of elements, allocated chars), width, height, letter
+
 ##################
 ########################
 
@@ -97,16 +99,34 @@ Find the rounded up sqrt of a number. Equivalent to ceil(sqrt(n)).
 
 size = high_sqrt(ft_lstcount(list) * 4);
 
-1.2.2 map_new
-# create a map with size ^
+1.2.2 map_new(size)
+# create a map with size, counted above
+for example, if we have 5 tetriminoes in the list: size = high_sqrt(5 * 4); size = 5, so the "volume" of the map will be 5*5 = 25 (the smallest square for five tetriminoes is 5*5)
+now we should create a map - array of strings 
+	1 - allocate the memory for the whole structure (t_map - contains int size and char **array)
+	2 the size of the map is incoming size (map->size = size)
+	3 allocate memory for the array of pointers with the size of incoming size
+	4 while counter i is less than incoming size:
+		create new string in each element of the array with incoming size (map->array[i] = ft_strnew(size);)
+		while counter j is less than incoming size:
+			fill each element of each string in each array with '.' (we create clean map) (map->array[i][j] = '.';)
+			increase j
+		increase i
+	5 return map ("clean")
+			
 
 
-1.2.3 solve-map (gets map and t_list)
+1.2.3 solve_map(t_map *map , t_list *list)
+gets clean map and t_list - list of tetriminoes the should be solved
+if there is NULL in the list = return 1
+
+tetri = (t_etris *)(list->content) (this structure contains pos, width, height and letter)
+
 1 - if you can't solve map - increase size (bigger square); free previous map and create new with a bigger size; repeate untill succeed
 
-2 - create new tetri with content of the incoming list
+2 - create variable tetri with content of the incoming list of valid tetris
 3 create counter y (height) and x (width)
-while counter y  is less than size of map - height of tetri + 1
+while counter y is less than size of map - height of tetri + 1
 	while counter x less than size of map - width of tetri + 1
 		if (place(tetri, map, x, y)) - if you can place it 
 			if ok - call recursion of solve_map with next element of list and return 1
@@ -116,19 +136,22 @@ while counter y  is less than size of map - height of tetri + 1
 
 1.2.3.1 place (map.c)
 gets tetri, map, x(width) and y(length)
+checks if the tetrimino can fit the place on the map
+
 create two counters 
 i - width
 j - height
 	while (i is less than the width of tetri)
 		while (j is less than the height of tetri)
-			if (the element of tetri at the position == '#' and the element on the map is not empty (not '.') -> return 0
+			if (the element of tetri at this position == '#' and the element on the map is not empty (not '.') -> return 0
 			else increase height)
 	increase width
-
 set_piece(tetri, map, point_new(x, y), tetri->value (letter))
 
 1.2.3.1.1 set-piece
 gets tetri, map, point at map, and letter
+fit the tetriminoe on the map
+
 create two counters 
 i - width
 j - height
