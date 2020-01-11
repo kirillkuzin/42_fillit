@@ -3,14 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   square.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kirillkuzin <kirillkuzin@student.42.fr>    +#+  +:+       +#+        */
+/*   By: malbert <malbert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/16 16:43:51 by kirillkuzin       #+#    #+#             */
-/*   Updated: 2019/12/16 17:22:08 by kirillkuzin      ###   ########.fr       */
+/*   Updated: 2020/01/11 23:52:59 by malbert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fillit.h"
+
+int			get_square_size(int amount_of_tetrominoes)
+{
+	// Написать ft_sqrt
+	return (ft_sqrt(4 * amount_of_tetrominoes));
+}
 
 char		**new_square(size_t square_size)
 {

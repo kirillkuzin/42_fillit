@@ -3,52 +3,106 @@
 /*                                                        :::      ::::::::   */
 /*   algorithm.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kirillkuzin <kirillkuzin@student.42.fr>    +#+  +:+       +#+        */
+/*   By: malbert <malbert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/19 15:07:12 by kirillkuzin       #+#    #+#             */
-/*   Updated: 2019/12/19 16:04:10 by kirillkuzin      ###   ########.fr       */
+/*   Updated: 2020/01/12 00:06:05 by malbert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fillit.h"
 
-char		**algorithm(t_list *list_of_tetrominoes, char** square, size_t square_size)
+char		**algorithm(t_list *list_of_tetrominoes, char** square)
 {
 	t_tetromino		*tetromino;
+	char			**filled_square;
 	int				i;
 	int				j;
-	int				k;
 
-	/* Берем пришедший элемент */
-	while (list_of_tetrominoes)
+	i = 0;
+	while (square[i])
 	{
-		tetromino = (t_tetromino*)list_of_tetrominoes->content;
-		/* Пытаемся вставить тетромину */
-		i = 0;
-		while (i < 4)
+		j = 0;
+		while (square[i][j])
 		{
-			j = 0;
-			/* Пока не дошли до конца строки и текущий символ - точка */
-			while (j < 4 && square[i][j] == '.')
+			if (square[i][j] == '.')
 			{
-				/* Меняем текущий символ на решетку */
-				square[i][j] = '#';
-				j++;
+				if (check_fit_tetromino(square, i, j, tetromino))
+				{
+					paste_tetromino(square, i, j, tetromino);
+					filled_square = algorithm(list_of_tetrominoes->next, square);
+					if (!filled_square)
+					{
+						remove_tetromino(square, i, j, tetromino);
+						continue;
+					}
+					else
+						return (filled_square);
+				}
+				else
+					return (NULL);
 			}
-			/* Если мы прошли количество символов, которое больше или равно
-			длине тетромины, а так же если количество оставшихся строк больше
-			или равно высоте тетромины, то переходим на следующую строку */
-			if (j >= tetromino->width && 4 - i >= tetromino->height - 1)
-				i++;
-			else
-				return (NULL);
+			j++;
 		}
-		square = algorithm(list_of_tetrominoes->next, square);
-		if (!square)
-		{
-			square = new_square(square_size);
-			list_of_tetrominoes = list_of_tetrominoes->next;
-		}
+		i++;
 	}
-	return (square);
+	return (NULL);
+}
+
+int			check_fit_tetromino(char **square, int i, int j, t_tetromino *tetromino)
+{
+	int		h;
+	int		w;
+
+	h = 0;
+	while (h < tetromino->height)
+	{
+		w = 0;
+		while (w < tetromino->width)
+		{
+			if (tetromino->body[h][w] == '#' && square[i + h][j + w] != '.')
+				return (0);
+			w++;
+		}
+		h++;
+	}
+	return (1);
+}
+
+void		paste_tetromino(char **square, int i, int j, t_tetromino *tetromino)
+{
+	int		h;
+	int		w;
+
+	h = 0;
+	while (h < tetromino->height)
+	{
+		w = 0;
+		while (w < tetromino->width)
+		{
+			if (tetromino->body[h][w] == '#')
+				square[i + h][j + w] = tetromino->letter;
+			w++;
+		}
+		h++;
+	}
+}
+
+void		remove_tetromino(char **square, int i, int j, t_tetromino *tetromino)
+{
+	int		h;
+	int		w;
+
+	h = 0;
+	while (h < tetromino->height)
+	{
+		w = 0;
+		while (w < tetromino->width)
+		{
+			if (tetromino->body[h][w] == '#')
+				square[i + h][j + w] = '.';
+			w++;
+		}
+		h++;
+	}
 }

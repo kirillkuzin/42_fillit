@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kirillkuzin <kirillkuzin@student.42.fr>    +#+  +:+       +#+        */
+/*   By: malbert <malbert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 15:55:46 by ggeordi           #+#    #+#             */
-/*   Updated: 2019/12/16 17:14:31 by kirillkuzin      ###   ########.fr       */
+/*   Updated: 2020/01/11 23:52:06 by malbert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ int		main(int argc, char **argv)
 {
 	int			fd;
 	int			amount_of_tetrominoes;
+	// Найти новое место для сохранения размера мапы
+	size_t		square_size;
 	t_list		**tetrominoes;
 	char		**square;
 
@@ -25,8 +27,10 @@ int		main(int argc, char **argv)
 		return (-1);
 	tetrominoes = read_tetrominoes(fd, &amount_of_tetrominoes);
 	close(fd);
-	ft_lstiter(*tetrominoes, write_tetromino);
-	square = new_square(amount_of_tetrominoes * 2);
+	square_size = get_square_size(amount_of_tetrominoes);
+	square = new_square(square_size);
+	while (!(square = algorithm(tetrominoes, square)))
+		square = new_square(++square_size);
 	print_square(square);
 	return (0);
 }
