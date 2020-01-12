@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   reader.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kirillkuzin <kirillkuzin@student.42.fr>    +#+  +:+       +#+        */
+/*   By: malbert <malbert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 15:32:18 by ggeordi           #+#    #+#             */
-/*   Updated: 2019/12/16 16:41:43 by kirillkuzin      ###   ########.fr       */
+/*   Updated: 2020/01/12 21:25:51 by malbert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fillit.h"
 
-int			line_is_valid(char *line)
+int			line_is_valid(char *line, int i)
 {
 	return (1);
 }
@@ -38,36 +38,19 @@ t_list		**read_tetrominoes(int fd, int *amount_of_tetrominoes)
 	int				j;
 	t_tetromino		*tetromino;
 	t_list			**tetrominoes;
+	char			buf[22];
 
 	j = 0;
-	if (!(tetromino = new_tetromino()))
-		return (NULL);
-	while ((i = get_next_line(fd, &(tetromino->body[j]))) != 0)
+	while ((i = read(fd, buf, 21)))
 	{
-		if (i == -1 || !(line_is_valid(tetromino->body[j])))
+		buf[i] = '\0';
+		if (i == -1 || !line_is_valid(&buf[0], i) || !(tetromino = new_tetromino(&buf[0], 'A' + j)))
 		{
 			ft_lstdel(tetrominoes, free_tetromino);
 			return (NULL);
 		}
-		j++;
-		if (j == 4)
-		{
-			// check leaks
-			tetrominoes = save_tetromino(tetromino);
-			(*amount_of_tetrominoes)++;
-			i = get_next_line(fd, &(tetromino->body[j]));
-			j = 0;
-			if (!(tetromino = new_tetromino()))
-			{
-				ft_lstdel(tetrominoes, free_tetromino);
-				return (NULL);
-			};
-		}
-	}
-	if (j != 0)
-	{
-		ft_lstdel(tetrominoes, free_tetromino);
-		return (NULL);
+		tetrominoes = save_tetromino(tetromino);
+		(*amount_of_tetrominoes)++;
 	}
 	return (tetrominoes);
 }

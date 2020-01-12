@@ -6,7 +6,7 @@
 /*   By: malbert <malbert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/16 16:43:51 by kirillkuzin       #+#    #+#             */
-/*   Updated: 2020/01/11 23:52:59 by malbert          ###   ########.fr       */
+/*   Updated: 2020/01/12 20:43:54 by malbert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 int			get_square_size(int amount_of_tetrominoes)
 {
-	// Написать ft_sqrt
 	return (ft_sqrt(4 * amount_of_tetrominoes));
 }
 

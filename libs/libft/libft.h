@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggeordi <ggeordi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: malbert <malbert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 17:14:11 by ggeordi           #+#    #+#             */
-/*   Updated: 2019/11/25 14:37:35 by ggeordi          ###   ########.fr       */
+/*   Updated: 2020/01/12 21:12:04 by malbert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ void				ft_putchar_fd(char c, int fd);
 void				ft_putstr_fd(char const *s, int fd);
 void				ft_putend_fd(int n, int fd);
 void				ft_putnbr_fd(int n, int fd);
+int					ft_sqrt(size_t n);
 
 typedef struct		s_list
 {

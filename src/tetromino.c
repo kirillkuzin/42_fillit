@@ -6,13 +6,13 @@
 /*   By: malbert <malbert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 20:15:27 by ggeordi           #+#    #+#             */
-/*   Updated: 2020/01/12 00:06:37 by malbert          ###   ########.fr       */
+/*   Updated: 2020/01/12 22:03:01 by malbert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fillit.h"
 
-t_tetromino		*new_tetromino()
+t_tetromino		*new_tetromino(char *tetromino_str, char letter)
 {
 	t_tetromino		*tetromino;
 	int				i;
@@ -20,22 +20,42 @@ t_tetromino		*new_tetromino()
 	i = 0;
 	if (!(tetromino = (t_tetromino*)malloc(sizeof(t_tetromino))))
 		return (NULL);
-	if (!(tetromino->body = (char**)malloc(sizeof(char*) * 5)))
+	if (!(tetromino->body = build_tetromino(tetromino_str)))
 	{
-		free(tetromino);
+		free_tetromino(tetromino, sizeof(tetromino));
 		return (NULL);
 	}
-	while (i < 4)
+	tetromino->letter = letter;
+	tetromino->width = 4;
+	tetromino->height = 4;
+	return (tetromino);
+}
+
+char			**build_tetromino(char *tetromino_str)
+{
+	int				i;
+	int				k;
+	int				first_pos;
+	char			**tetromino_body;
+
+	i = 0;
+	k = 0;
+	first_pos = -1;
+	if (!(tetromino_body = new_square(4)))
+		return (NULL);
+	while (tetromino_str[i])
 	{
-		if (!(tetromino->body[i] = (char*)malloc(sizeof(char) * 5)))
+		if (tetromino_str[i] == '#')
 		{
-			free_tetromino(tetromino, sizeof(tetromino));
-			return (NULL);
+			if (first_pos == -1)
+				first_pos = i;
+			tetromino_body[k][i - first_pos - k * 5] = '#';
 		}
-		tetromino->body[i][4] = '\0';
+		if (tetromino_str[i] == '\n' && first_pos != -1)
+			k++;
 		i++;
 	}
-	return (tetromino);
+	return (tetromino_body);
 }
 
 void		free_tetromino(void *tetromino_content, size_t tetromino_size)

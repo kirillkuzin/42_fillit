@@ -1,23 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_sqrt.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggeordi <ggeordi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: malbert <malbert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/25 14:33:10 by ggeordi           #+#    #+#             */
-/*   Updated: 2019/12/15 17:20:44 by ggeordi          ###   ########.fr       */
+/*   Created: 2020/01/12 20:44:07 by malbert           #+#    #+#             */
+/*   Updated: 2020/01/12 21:11:38 by malbert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#include "libft.h"
 
-# define BUFF_SIZE 1
-# include <stdlib.h>
-# include <unistd.h>
-# include "libft.h"
+int			ft_sqrt(size_t n)
+{
+	size_t	s;
 
-int get_next_line(const int fd, char **line);
-
-#endif
+	s = 2;
+	while (s * s < n)
+		s++;
+	return (s);
+}
