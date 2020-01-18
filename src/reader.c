@@ -6,15 +6,17 @@
 /*   By: malbert <malbert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 15:32:18 by ggeordi           #+#    #+#             */
-/*   Updated: 2020/01/12 21:25:51 by malbert          ###   ########.fr       */
+/*   Updated: 2020/01/18 14:39:17 by malbert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fillit.h"
+#include "../fillit.h"
 
 int			line_is_valid(char *line, int i)
 {
-	return (1);
+	if (line && i)
+		return (1);
+	return (0);
 }
 
 t_list		**save_tetromino(t_tetromino *tetromino)

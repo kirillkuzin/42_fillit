@@ -6,11 +6,11 @@
 /*   By: malbert <malbert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/19 15:07:12 by kirillkuzin       #+#    #+#             */
-/*   Updated: 2020/01/12 22:36:15 by malbert          ###   ########.fr       */
+/*   Updated: 2020/01/18 14:32:30 by malbert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fillit.h"
+#include "../fillit.h"
 
 char		**algorithm(t_list *list_of_tetrominoes, char** square)
 {

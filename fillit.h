@@ -6,7 +6,7 @@
 /*   By: malbert <malbert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 15:50:18 by ggeordi           #+#    #+#             */
-/*   Updated: 2020/01/12 21:06:19 by malbert          ###   ########.fr       */
+/*   Updated: 2020/01/18 14:41:33 by malbert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 #include <stdio.h>
 #include <fcntl.h>
-#include "libft.h"
+# include "libft/libft.h"
 
 typedef struct			s_tetromino
 {

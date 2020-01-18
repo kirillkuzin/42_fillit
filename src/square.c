@@ -6,11 +6,11 @@
 /*   By: malbert <malbert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/16 16:43:51 by kirillkuzin       #+#    #+#             */
-/*   Updated: 2020/01/12 20:43:54 by malbert          ###   ########.fr       */
+/*   Updated: 2020/01/18 14:32:29 by malbert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fillit.h"
+#include "../fillit.h"
 
 int			get_square_size(int amount_of_tetrominoes)
 {

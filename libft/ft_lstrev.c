@@ -1,28 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   writer.c                                           :+:      :+:    :+:   */
+/*   ft_lstrev.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: malbert <malbert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/12/15 20:23:16 by ggeordi           #+#    #+#             */
-/*   Updated: 2020/01/18 14:32:27 by malbert          ###   ########.fr       */
+/*   Created: 2020/01/18 13:16:22 by malbert           #+#    #+#             */
+/*   Updated: 2020/01/18 13:16:24 by malbert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../fillit.h"
+#include "libft.h"
 
-void		write_tetromino(t_list *elem)
+void		ft_lstrev(t_list **alst)
 {
-	int				i;
-	t_tetromino		*tetromino;
+	t_list	*prev;
+	t_list	*cur;
+	t_list	*next;
 
-	i = 0;
-	tetromino = elem->content;
-	while (i < 4)
+	prev = NULL;
+	cur = *alst;
+	while (cur != NULL)
 	{
-		printf("%s\n", tetromino->body[i]);
-		i++;
+		next = cur->next;
+		cur->next = prev;
+		prev = cur;
+		cur = next;
 	}
-	printf("-------------------\n");
+	*alst = prev;
 }

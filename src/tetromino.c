@@ -6,11 +6,11 @@
 /*   By: malbert <malbert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 20:15:27 by ggeordi           #+#    #+#             */
-/*   Updated: 2020/01/12 22:03:01 by malbert          ###   ########.fr       */
+/*   Updated: 2020/01/18 14:42:19 by malbert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fillit.h"
+#include "../fillit.h"
 
 t_tetromino		*new_tetromino(char *tetromino_str, char letter)
 {
@@ -64,11 +64,15 @@ void		free_tetromino(void *tetromino_content, size_t tetromino_size)
 	int				i;
 
 	i = 0;
-	tetromino = (t_tetromino*)tetromino_content;
-	while (i < 5)
+
+	if (tetromino_size)
 	{
-		ft_strdel(&(tetromino->body[i]));
-		i++;
+		tetromino = (t_tetromino*)tetromino_content;
+		while (i < 5)
+		{
+			ft_strdel(&(tetromino->body[i]));
+			i++;
+		}
+		ft_memdel((void**)&tetromino);
 	}
-	ft_memdel((void**)&tetromino);
 }
