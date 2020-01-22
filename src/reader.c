@@ -6,7 +6,7 @@
 /*   By: malbert <malbert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 15:32:18 by ggeordi           #+#    #+#             */
-/*   Updated: 2020/01/18 14:39:17 by malbert          ###   ########.fr       */
+/*   Updated: 2020/01/18 15:33:12 by malbert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,5 +54,6 @@ t_list		**read_tetrominoes(int fd, int *amount_of_tetrominoes)
 		tetrominoes = save_tetromino(tetromino);
 		(*amount_of_tetrominoes)++;
 	}
+	ft_lstrev(tetrominoes);
 	return (tetrominoes);
 }
