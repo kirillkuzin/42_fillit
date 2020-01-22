@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   algorithm.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malbert <malbert@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ggeordi <ggeordi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/19 15:07:12 by kirillkuzin       #+#    #+#             */
-/*   Updated: 2020/01/18 15:30:43 by malbert          ###   ########.fr       */
+/*   Updated: 2020/01/22 20:52:40 by ggeordi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,10 @@ char		**algorithm(t_list *list_of_tetrominoes, char** square)
 					if (!filled_square)
 					{
 						remove_tetromino(square, i, j, tetromino);
-						continue;
 					}
 					else
 						return (filled_square);
 				}
-				else
-					return (NULL);
 			}
 			j++;
 		}

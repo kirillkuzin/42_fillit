@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tetromino.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malbert <malbert@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ggeordi <ggeordi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 20:15:27 by ggeordi           #+#    #+#             */
-/*   Updated: 2020/01/18 14:42:19 by malbert          ###   ########.fr       */
+/*   Updated: 2020/01/22 21:33:24 by ggeordi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,24 +35,31 @@ char			**build_tetromino(char *tetromino_str)
 {
 	int				i;
 	int				k;
-	int				first_pos;
+	int				x_shift;
+	int				c;
+	int				j;
 	char			**tetromino_body;
 
 	i = 0;
 	k = 0;
-	first_pos = -1;
+	c = -1;
+	x_shift = -1;
 	if (!(tetromino_body = new_square(4)))
 		return (NULL);
+	ft_putstr(tetromino_str);
 	while (tetromino_str[i])
 	{
 		if (tetromino_str[i] == '#')
 		{
-			if (first_pos == -1)
-				first_pos = i;
-			tetromino_body[k][i - first_pos - k * 5] = '#';
+			if (c = -1 && (i < x_shift || x_shift == -1))
+				x_shift = i;
+			c = -1;
 		}
-		if (tetromino_str[i] == '\n' && first_pos != -1)
+		if (tetromino_str[i] == '\n')
+		{
 			k++;
+			c = -1;
+		}
 		i++;
 	}
 	return (tetromino_body);

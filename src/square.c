@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   square.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malbert <malbert@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ggeordi <ggeordi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/16 16:43:51 by kirillkuzin       #+#    #+#             */
-/*   Updated: 2020/01/18 14:32:29 by malbert          ###   ########.fr       */
+/*   Updated: 2020/01/22 20:21:08 by ggeordi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void		print_square(char **square)
 	int		i;
 
 	i = 0;
-	while (square[i])
+	while (square[i][0])
 	{
 		ft_putstr(square[i]);
 		ft_putchar('\n');
