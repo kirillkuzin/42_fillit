@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tetromino.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggeordi <ggeordi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: malbert <malbert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 20:15:27 by ggeordi           #+#    #+#             */
-/*   Updated: 2020/01/22 21:33:24 by ggeordi          ###   ########.fr       */
+/*   Updated: 2020/01/25 23:11:50 by malbert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,47 +35,40 @@ char			**build_tetromino(char *tetromino_str)
 {
 	int				i;
 	int				k;
-	int				x_shift;
-	int				c;
-	int				j;
+	int				first_pos;
 	char			**tetromino_body;
 
 	i = 0;
 	k = 0;
-	c = -1;
-	x_shift = -1;
+	first_pos = -1;
 	if (!(tetromino_body = new_square(4)))
 		return (NULL);
-	ft_putstr(tetromino_str);
 	while (tetromino_str[i])
 	{
 		if (tetromino_str[i] == '#')
 		{
-			if (c = -1 && (i < x_shift || x_shift == -1))
-				x_shift = i;
-			c = -1;
+			if (first_pos == -1)
+				first_pos = i;
+			tetromino_body[k][i - first_pos - k * 5] = '#';
 		}
-		if (tetromino_str[i] == '\n')
-		{
+		if (tetromino_str[i] == '\n' && first_pos != -1)
 			k++;
-			c = -1;
-		}
 		i++;
 	}
 	return (tetromino_body);
 }
 
-void		free_tetromino(void *tetromino_content, size_t tetromino_size)
+void			free_tetromino(void *tetromino_content, size_t tetromino_size)
 {
 	t_tetromino		*tetromino;
 	int				i;
 
 	i = 0;
-
-	if (tetromino_size)
+	printf("%zu", tetromino_size);
+	while (tetromino_size || !tetromino_size)
 	{
 		tetromino = (t_tetromino*)tetromino_content;
-		while (i < 5)
+		while (i < 5) // вообще здесь нужно вроде tetri->height потому что может быть больше чем 5
 		{
 			ft_strdel(&(tetromino->body[i]));
 			i++;
