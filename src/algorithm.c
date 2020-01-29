@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   algorithm.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malbert <malbert@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ggeordi <ggeordi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/19 15:07:12 by kirillkuzin       #+#    #+#             */
-/*   Updated: 2020/01/25 20:01:16 by malbert          ###   ########.fr       */
+/*   Updated: 2020/01/30 00:12:38 by ggeordi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int			check_fit_tetromino(char **square, int i, int j, t_tetromino *tetromino)
 		w = 0;
 		while (w < 4)
 		{
-			if (tetromino->body[h][w] == '#' && square[i + h][j + w] != '.')
+			if (tetromino->body[h][w] != '.'  && square[i + h][j + w] != '.')
 				return (0);
 			w++;
 		}
@@ -78,8 +78,8 @@ void		paste_tetromino(char **square, int i, int j, t_tetromino *tetromino)
 		w = 0;
 		while (w < 4)
 		{
-			if (tetromino->body[h][w] == '#')
-				square[i + h][j + w] = '#';
+			if (tetromino->body[h][w] != '.')
+				square[i + h][j + w] = tetromino->body[h][w];
 			w++;
 		}
 		h++;
@@ -97,7 +97,7 @@ void		remove_tetromino(char **square, int i, int j, t_tetromino *tetromino)
 		w = 0;
 		while (w < 4)
 		{
-			if (tetromino->body[h][w] == '#')
+			if (tetromino->body[h][w] != '.')
 				square[i + h][j + w] = '.';
 			w++;
 		}

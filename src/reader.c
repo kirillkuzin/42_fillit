@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   reader.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malbert <malbert@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ggeordi <ggeordi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 15:32:18 by ggeordi           #+#    #+#             */
-/*   Updated: 2020/01/25 23:32:35 by malbert          ###   ########.fr       */
+/*   Updated: 2020/01/29 23:51:28 by ggeordi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,35 +75,46 @@ t_list		**save_tetromino(t_tetromino *tetromino)
 	t_list			*new_tetromino;
 
 	if (tetrominoes == NULL)
-		tetrominoes = ft_lstnew(tetromino, sizeof(tetromino));
+	{
+		if (!(tetrominoes = ft_lstnew(tetromino, sizeof(tetromino))))
+			return (NULL);
+	}
 	else
 	{
-		new_tetromino = ft_lstnew(tetromino, sizeof(tetromino));
+		if (!(new_tetromino = ft_lstnew(tetromino, sizeof(tetromino))))
+			return (NULL);
 		ft_lstadd(&tetrominoes, new_tetromino);
 	}
+	tetromino = tetrominoes->content;
 	return (&tetrominoes);
 }
 
 t_list		**read_tetri(int fd, int *amount_of_tetrominoes)
 {
 	int				i;
-	int				j;
 	t_tetromino		*tetromino;
 	t_list			**tetrominoes;
-	char			*buf;
+	char			buf[21];
 
-	j = 0;
-	buf = ft_strnew(21);
-	while ((i = read(fd, buf, 21)) >= 20)
+	tetrominoes = NULL;
+	while ((i = read(fd, &buf[0], 21)) >= 20)
 	{
-		if (i == -1 || !(line_is_valid(buf, i))
-		|| !(tetromino = new_tetromino(buf, 'A' + j)))
+		if (!(line_is_valid(&buf[0], i))
+		|| !(tetromino = new_tetromino(&buf[0], 'A' + (*amount_of_tetrominoes))))
 		{
-			//ft_lstdel(tetrominoes, free_tetromino); крч тут какая то дичь, я не совсем понял почему все ломается, sorry ;(
+			if (tetrominoes)
+				ft_lstdel(tetrominoes, free_tetromino);
 			return (NULL);
 		}
-		tetrominoes = save_tetromino(tetromino);
+		if (!(tetrominoes = save_tetromino(tetromino)))
+			return (NULL);
 		(*amount_of_tetrominoes)++;
+	}
+	if (i == -1 || i > 0)
+	{
+		if (tetrominoes)
+			ft_lstdel(tetrominoes, free_tetromino);
+		return (NULL);
 	}
 	ft_lstrev(tetrominoes);
 	return (tetrominoes);

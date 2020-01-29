@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tetromino.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malbert <malbert@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ggeordi <ggeordi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 20:15:27 by ggeordi           #+#    #+#             */
-/*   Updated: 2020/01/25 23:11:50 by malbert          ###   ########.fr       */
+/*   Updated: 2020/01/30 00:13:02 by ggeordi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,42 +20,68 @@ t_tetromino		*new_tetromino(char *tetromino_str, char letter)
 	i = 0;
 	if (!(tetromino = (t_tetromino*)malloc(sizeof(t_tetromino))))
 		return (NULL);
-	if (!(tetromino->body = build_tetromino(tetromino_str)))
+	if (!(tetromino->body = new_square(4)))
 	{
 		free_tetromino(tetromino, sizeof(tetromino));
 		return (NULL);
 	}
-	tetromino->letter = letter;
+	if (!tetromino->body)
+	{
+		free_tetromino(tetromino, sizeof(tetromino));
+		return (NULL);
+	}
+	build_tetromino(tetromino->body, tetromino_str, letter);
 	tetromino->width = 4;
 	tetromino->height = 4;
 	return (tetromino);
 }
 
-char			**build_tetromino(char *tetromino_str)
+void			build_tetromino(char **tetromino_body, char *tetromino_str, char letter)
 {
 	int				i;
 	int				k;
-	int				first_pos;
-	char			**tetromino_body;
+	int				x_shift;
+	int				y_shift;
 
 	i = 0;
 	k = 0;
-	first_pos = -1;
-	if (!(tetromino_body = new_square(4)))
-		return (NULL);
+	x_shift = 10;
+	y_shift = -1;
+	get_shifts(tetromino_str, &x_shift, &y_shift);
 	while (tetromino_str[i])
 	{
 		if (tetromino_str[i] == '#')
 		{
-			if (first_pos == -1)
-				first_pos = i;
-			tetromino_body[k][i - first_pos - k * 5] = '#';
+			tetromino_body[k - y_shift][i - k * 5 - x_shift] = letter;
 		}
-		if (tetromino_str[i] == '\n' && first_pos != -1)
+		else if (tetromino_str[i] == '\n')
 			k++;
 		i++;
 	}
-	return (tetromino_body);
+}
+
+void			get_shifts(char *tetromino_str, int *x_shift, int *y_shift)
+{
+	int				i;
+	int				k;
+
+	i = 0;
+	k = 0;
+	while (tetromino_str[i])
+	{
+		if (tetromino_str[i] == '#')
+		{
+			if (k < *x_shift)
+				*x_shift = k;
+			if (*y_shift == -1)
+				*y_shift = i / 5;
+		}
+		else if (tetromino_str[i] == '\n')
+			k = 0;
+		else
+			k++;
+		i++;
+	}
 }
 
 void			free_tetromino(void *tetromino_content, size_t tetromino_size)
@@ -63,16 +89,13 @@ void			free_tetromino(void *tetromino_content, size_t tetromino_size)
 	t_tetromino		*tetromino;
 	int				i;
 
+	tetromino = (t_tetromino*)tetromino_content;
+	i = tetromino_size;
 	i = 0;
-	printf("%zu", tetromino_size);
-	while (tetromino_size || !tetromino_size)
+	while (i < 5)
 	{
-		tetromino = (t_tetromino*)tetromino_content;
-		while (i < 5) // вообще здесь нужно вроде tetri->height потому что может быть больше чем 5
-		{
-			ft_strdel(&(tetromino->body[i]));
-			i++;
-		}
-		ft_memdel((void**)&tetromino);
+		ft_strdel(&(tetromino->body[i]));
+		i++;
 	}
+	ft_memdel((void**)&tetromino);
 }

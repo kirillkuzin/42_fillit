@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malbert <malbert@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ggeordi <ggeordi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 15:55:46 by ggeordi           #+#    #+#             */
-/*   Updated: 2020/01/25 23:07:51 by malbert          ###   ########.fr       */
+/*   Updated: 2020/01/30 00:16:20 by ggeordi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,24 +19,29 @@ int		main(int argc, char **argv)
 	t_list		**tetri;
 	char		**square;
 
+	amount = 0;
 	if (argc != 2)
 	{
 		ft_putstr("usage: fillit input_file\n");
-		return (1);
+		exit (1);
 	}
 	else
 	{
 		if ((tetri = read_tetri(open(argv[1], O_RDONLY), &amount)) == NULL)
 		{
 			ft_putstr("error\n");
-			return (1);
+			exit (1);
 		}
 		ft_lstiter(*tetri, write_tetromino);
 		square_size = get_square_size(amount);
-		square = new_square(square_size);
+		if (!(square = new_square(square_size)))
+			exit (1);
 		while (!(square = algorithm(*tetri, square)))
-			square = new_square(++square_size);
+		{
+			if (!(square = new_square(++square_size)))
+				exit (1);
+		}
 		print_square(square);
-		return (0);
+		exit (0);
 	}
 }

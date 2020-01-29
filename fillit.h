@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fillit.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malbert <malbert@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ggeordi <ggeordi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 15:50:18 by ggeordi           #+#    #+#             */
-/*   Updated: 2020/01/25 22:55:28 by malbert          ###   ########.fr       */
+/*   Updated: 2020/01/30 00:12:54 by ggeordi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 typedef struct			s_tetromino
 {
 	char				**body;
-	char				letter;
 	int					width;
 	int					height;
 }						t_tetromino;
@@ -30,7 +29,8 @@ int						tetri_valid(char *line);
 int						line_is_valid(char *line, int counter);
 void					write_tetromino(t_list *elem);
 t_tetromino				*new_tetromino(char *tetromino_str, char letter);
-char					**build_tetromino(char *tetromino_str);
+void					build_tetromino(char **tetromino_body, char *tetromino_str, char letter);
+void					get_shifts(char *tetromino_str, int *x_shift, int *y_shift);
 void					free_tetromino(void *tetromino_content,
 						size_t tetromino_size);
 int						get_square_size(int amount_of_tetrominoes);
