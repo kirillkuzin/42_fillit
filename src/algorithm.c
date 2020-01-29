@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   algorithm.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggeordi <ggeordi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: malbert <malbert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/19 15:07:12 by kirillkuzin       #+#    #+#             */
-/*   Updated: 2020/01/22 20:52:40 by ggeordi          ###   ########.fr       */
+/*   Updated: 2020/01/25 20:01:16 by malbert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../fillit.h"
 
-char		**algorithm(t_list *list_of_tetrominoes, char** square)
+char		**algorithm(t_list *list_of_tetrominoes, char **square)
 {
 	t_tetromino		*tetromino;
 	char			**filled_square;
@@ -35,9 +35,7 @@ char		**algorithm(t_list *list_of_tetrominoes, char** square)
 						return (square);
 					filled_square = algorithm(list_of_tetrominoes->next, square);
 					if (!filled_square)
-					{
 						remove_tetromino(square, i, j, tetromino);
-					}
 					else
 						return (filled_square);
 				}
