@@ -6,7 +6,7 @@
 /*   By: malbert <malbert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/16 16:43:51 by kirillkuzin       #+#    #+#             */
-/*   Updated: 2020/01/25 20:27:41 by malbert          ###   ########.fr       */
+/*   Updated: 2020/02/06 22:59:36 by malbert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,19 @@ char		**new_square(size_t square_size)
 	i = 0;
 	if (!(square = (char**)malloc(sizeof(char*) * (square_size + 1))))
 		return (NULL);
-	square[square_size] = (char*)malloc(sizeof(char));
+	if (!(square[square_size] = (char*)malloc(sizeof(char))))
+	{
+		ft_memdel((void**)square);
+		return (NULL);
+	}
 	square[square_size][0] = '\0';
 	while (i < square_size)
 	{
-		square[i] = ft_strnew(square_size);
+		if (!(square[i] = ft_strnew(square_size)))
+		{
+			ft_memdel((void**)square);
+			return (NULL);
+		}
 		j = 0;
 		while (j < square_size)
 		{
