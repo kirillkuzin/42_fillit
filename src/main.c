@@ -6,7 +6,7 @@
 /*   By: ggeordi <ggeordi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 15:55:46 by ggeordi           #+#    #+#             */
-/*   Updated: 2020/01/30 00:16:20 by ggeordi          ###   ########.fr       */
+/*   Updated: 2020/02/06 18:30:26 by ggeordi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,10 @@ int		main(int argc, char **argv)
 			ft_putstr("error\n");
 			exit (1);
 		}
-		ft_lstiter(*tetri, write_tetromino);
 		square_size = get_square_size(amount);
 		if (!(square = new_square(square_size)))
 			exit (1);
-		while (!(square = algorithm(*tetri, square)))
+		while (!(square = algorithm(*tetri, square, 1)))
 		{
 			if (!(square = new_square(++square_size)))
 				exit (1);

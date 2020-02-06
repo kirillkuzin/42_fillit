@@ -6,7 +6,7 @@
 /*   By: ggeordi <ggeordi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 20:15:27 by ggeordi           #+#    #+#             */
-/*   Updated: 2020/01/30 00:13:02 by ggeordi          ###   ########.fr       */
+/*   Updated: 2020/02/05 16:26:04 by ggeordi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,6 @@ t_tetromino		*new_tetromino(char *tetromino_str, char letter)
 		return (NULL);
 	}
 	build_tetromino(tetromino->body, tetromino_str, letter);
-	tetromino->width = 4;
-	tetromino->height = 4;
 	return (tetromino);
 }
 

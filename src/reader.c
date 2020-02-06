@@ -6,7 +6,7 @@
 /*   By: ggeordi <ggeordi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 15:32:18 by ggeordi           #+#    #+#             */
-/*   Updated: 2020/01/29 23:51:28 by ggeordi          ###   ########.fr       */
+/*   Updated: 2020/02/06 18:28:17 by ggeordi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,11 +92,13 @@ t_list		**save_tetromino(t_tetromino *tetromino)
 t_list		**read_tetri(int fd, int *amount_of_tetrominoes)
 {
 	int				i;
+	int				last_i;
 	t_tetromino		*tetromino;
 	t_list			**tetrominoes;
 	char			buf[21];
 
 	tetrominoes = NULL;
+	last_i = 0;
 	while ((i = read(fd, &buf[0], 21)) >= 20)
 	{
 		if (!(line_is_valid(&buf[0], i))
@@ -109,8 +111,9 @@ t_list		**read_tetri(int fd, int *amount_of_tetrominoes)
 		if (!(tetrominoes = save_tetromino(tetromino)))
 			return (NULL);
 		(*amount_of_tetrominoes)++;
+		last_i = i;
 	}
-	if (i == -1 || i > 0)
+	if (i == -1 || i > 0 || last_i == 0 || last_i == 21)
 	{
 		if (tetrominoes)
 			ft_lstdel(tetrominoes, free_tetromino);
