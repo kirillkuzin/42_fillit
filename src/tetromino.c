@@ -6,7 +6,7 @@
 /*   By: ggeordi <ggeordi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 20:15:27 by ggeordi           #+#    #+#             */
-/*   Updated: 2020/02/05 16:26:04 by ggeordi          ###   ########.fr       */
+/*   Updated: 2020/02/11 00:06:54 by ggeordi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,12 @@ t_tetromino		*new_tetromino(char *tetromino_str, char letter)
 		free_tetromino(tetromino, sizeof(tetromino));
 		return (NULL);
 	}
-	build_tetromino(tetromino->body, tetromino_str, letter);
+	build_tetromino(tetromino, tetromino->body, tetromino_str, letter);
 	return (tetromino);
 }
 
-void			build_tetromino(char **tetromino_body, char *tetromino_str, char letter)
+void			build_tetromino(t_tetromino *tetromino, char **tetromino_body,
+								char *tetromino_str, char letter)
 {
 	int				i;
 	int				k;
@@ -43,7 +44,7 @@ void			build_tetromino(char **tetromino_body, char *tetromino_str, char letter)
 
 	i = 0;
 	k = 0;
-	x_shift = 10;
+	x_shift = -1;
 	y_shift = -1;
 	get_shifts(tetromino_str, &x_shift, &y_shift);
 	while (tetromino_str[i])
@@ -56,6 +57,9 @@ void			build_tetromino(char **tetromino_body, char *tetromino_str, char letter)
 			k++;
 		i++;
 	}
+	tetromino->x_shift = 0;
+	while (tetromino_body[0][tetromino->x_shift] == '.')
+		tetromino->x_shift++;
 }
 
 void			get_shifts(char *tetromino_str, int *x_shift, int *y_shift)
@@ -69,7 +73,7 @@ void			get_shifts(char *tetromino_str, int *x_shift, int *y_shift)
 	{
 		if (tetromino_str[i] == '#')
 		{
-			if (k < *x_shift)
+			if (k < *x_shift || *x_shift == -1)
 				*x_shift = k;
 			if (*y_shift == -1)
 				*y_shift = i / 5;
@@ -90,9 +94,9 @@ void			free_tetromino(void *tetromino_content, size_t tetromino_size)
 	tetromino = (t_tetromino*)tetromino_content;
 	i = tetromino_size;
 	i = 0;
-	while (i < 5)
+	while (i < 4)
 	{
-		ft_strdel(&(tetromino->body[i]));
+		free(tetromino->body[i]);
 		i++;
 	}
 	ft_memdel((void**)&tetromino);

@@ -6,7 +6,7 @@
 /*   By: ggeordi <ggeordi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 15:32:18 by ggeordi           #+#    #+#             */
-/*   Updated: 2020/02/06 18:28:17 by ggeordi          ###   ########.fr       */
+/*   Updated: 2020/02/11 00:10:18 by ggeordi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,32 +69,24 @@ int			line_is_valid(char *line, int counter)
 	return (1);
 }
 
-t_list		**save_tetromino(t_tetromino *tetromino)
+t_list		*save_tetromino(t_tetromino *tetromino, t_list *tetrominoes)
 {
-	static t_list	*tetrominoes;
-	t_list			*new_tetromino;
+	t_list				*next_tetrimino;
 
-	if (tetrominoes == NULL)
-	{
-		if (!(tetrominoes = ft_lstnew(tetromino, sizeof(tetromino))))
-			return (NULL);
-	}
-	else
-	{
-		if (!(new_tetromino = ft_lstnew(tetromino, sizeof(tetromino))))
-			return (NULL);
-		ft_lstadd(&tetrominoes, new_tetromino);
-	}
-	tetromino = tetrominoes->content;
-	return (&tetrominoes);
+	next_tetrimino = tetrominoes;
+	tetrominoes = (t_list*)malloc(sizeof(t_list));
+	tetrominoes->content = tetromino;
+	tetrominoes->content_size = sizeof(tetromino);
+	tetrominoes->next = next_tetrimino;
+	return (tetrominoes);
 }
 
-t_list		**read_tetri(int fd, int *amount_of_tetrominoes)
+t_list		*read_tetri(int fd, int *amount_of_tetrominoes)
 {
 	int				i;
 	int				last_i;
 	t_tetromino		*tetromino;
-	t_list			**tetrominoes;
+	t_list			*tetrominoes;
 	char			buf[21];
 
 	tetrominoes = NULL;
@@ -102,13 +94,15 @@ t_list		**read_tetri(int fd, int *amount_of_tetrominoes)
 	while ((i = read(fd, &buf[0], 21)) >= 20)
 	{
 		if (!(line_is_valid(&buf[0], i))
-		|| !(tetromino = new_tetromino(&buf[0], 'A' + (*amount_of_tetrominoes))))
+		|| *(amount_of_tetrominoes) == 26
+		|| !(tetromino = new_tetromino(
+				&buf[0], 'A' + (*amount_of_tetrominoes))))
 		{
 			if (tetrominoes)
-				ft_lstdel(tetrominoes, free_tetromino);
+				ft_lstdel(&tetrominoes, free_tetromino);
 			return (NULL);
 		}
-		if (!(tetrominoes = save_tetromino(tetromino)))
+		if (!(tetrominoes = save_tetromino(tetromino, tetrominoes)))
 			return (NULL);
 		(*amount_of_tetrominoes)++;
 		last_i = i;
@@ -116,9 +110,9 @@ t_list		**read_tetri(int fd, int *amount_of_tetrominoes)
 	if (i == -1 || i > 0 || last_i == 0 || last_i == 21)
 	{
 		if (tetrominoes)
-			ft_lstdel(tetrominoes, free_tetromino);
+			ft_lstdel(&tetrominoes, free_tetromino);
 		return (NULL);
 	}
-	ft_lstrev(tetrominoes);
+	ft_lstrev(&tetrominoes);
 	return (tetrominoes);
 }

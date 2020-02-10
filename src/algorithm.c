@@ -6,13 +6,14 @@
 /*   By: ggeordi <ggeordi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/19 15:07:12 by kirillkuzin       #+#    #+#             */
-/*   Updated: 2020/02/05 18:15:53 by ggeordi          ###   ########.fr       */
+/*   Updated: 2020/02/11 00:05:50 by ggeordi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../fillit.h"
 
-char		**algorithm(t_list *list_of_tetrominoes, char **square, int first)
+char				**algorithm(t_list *list_of_tetrominoes, \
+						char **square, int first)
 {
 	t_tetromino		*tetromino;
 	char			**filled_square;
@@ -37,7 +38,7 @@ char		**algorithm(t_list *list_of_tetrominoes, char **square, int first)
 					if (!filled_square)
 						remove_tetromino(square, i, j, tetromino, first);
 					else
-					return (filled_square);
+						return (filled_square);
 				}
 			}
 			j++;
@@ -47,10 +48,10 @@ char		**algorithm(t_list *list_of_tetrominoes, char **square, int first)
 	return (NULL);
 }
 
-int			check_fit_tetromino(char **square, int i, int j, t_tetromino *tetromino, int first)
+int					check_fit_tetromino(char **square, int i, int j, t_tetromino *tetromino, int first)
 {
-	int		h;
-	int		w;
+	int				h;
+	int				w;
 
 	h = 0;
 	while (tetromino->body[h][0] != '\0')
@@ -65,7 +66,7 @@ int			check_fit_tetromino(char **square, int i, int j, t_tetromino *tetromino, i
 			}
 			else
 			{
-				if (tetromino->body[h][w] != '.' && square[i + h][j + w - tetrimino_xshift(tetromino)] != '.')
+				if (tetromino->body[h][w] != '.' && square[i + h][j + w - tetromino->x_shift] != '.')
 					return (0);
 			}
 			w++;
@@ -75,22 +76,10 @@ int			check_fit_tetromino(char **square, int i, int j, t_tetromino *tetromino, i
 	return (1);
 }
 
-int		tetrimino_xshift(t_tetromino *tetrimino)
+void				paste_tetromino(char **square, int i, int j, t_tetromino *tetromino, int first)
 {
-	int x_shift;
-
-	x_shift = 0;
-	while (tetrimino->body[0][x_shift] == '.')
-	{
-		x_shift++;
-	}
-	return (x_shift);
-}
-
-void		paste_tetromino(char **square, int i, int j, t_tetromino *tetromino, int first)
-{
-	int		h;
-	int		w;
+	int				h;
+	int				w;
 
 	h = 0;
 	while (tetromino->body[h][0] != '\0')
@@ -103,7 +92,7 @@ void		paste_tetromino(char **square, int i, int j, t_tetromino *tetromino, int f
 				if (first == 1)
 					square[i + h][j + w] = tetromino->body[h][w];
 				else
-					square[i + h][j + w - tetrimino_xshift(tetromino)] = tetromino->body[h][w];
+					square[i + h][j + w - tetromino->x_shift] = tetromino->body[h][w];
 			}
 			w++;
 		}
@@ -111,10 +100,10 @@ void		paste_tetromino(char **square, int i, int j, t_tetromino *tetromino, int f
 	}
 }
 
-void		remove_tetromino(char **square, int i, int j, t_tetromino *tetromino, int first)
+void				remove_tetromino(char **square, int i, int j, t_tetromino *tetromino, int first)
 {
-	int		h;
-	int		w;
+	int				h;
+	int				w;
 
 	h = 0;
 	while (tetromino->body[h][0] != '\0')
@@ -127,7 +116,7 @@ void		remove_tetromino(char **square, int i, int j, t_tetromino *tetromino, int 
 				if (first == 1)
 					square[i + h][j + w] = '.';
 				else
-					square[i + h][j + w - tetrimino_xshift(tetromino)] = '.';
+					square[i + h][j + w - tetromino->x_shift] = '.';
 			}
 			w++;
 		}
