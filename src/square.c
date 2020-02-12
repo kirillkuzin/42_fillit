@@ -6,7 +6,7 @@
 /*   By: ggeordi <ggeordi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/16 16:43:51 by kirillkuzin       #+#    #+#             */
-/*   Updated: 2020/02/10 23:39:40 by ggeordi          ###   ########.fr       */
+/*   Updated: 2020/02/12 22:12:49 by ggeordi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,26 +27,16 @@ char		**new_square(size_t square_size)
 	if (!(square = (char**)malloc(sizeof(char*) * (square_size + 1))))
 		return (NULL);
 	if (!(square[square_size] = (char*)malloc(sizeof(char))))
-	{
-		free_square(square, square_size);
-		return (NULL);
-	}
+		return (free_square(square, square_size));
 	square[square_size][0] = '\0';
 	while (i < square_size)
 	{
 		if (!(square[i] = (char*)malloc(sizeof(char) * square_size + 1)))
-		{
-			free_square(square, square_size);
-			return (NULL);
-		}
+			return (free_square(square, square_size));
 		j = 0;
 		while (j < square_size)
-		{
-			square[i][j] = '.';
-			j++;
-		}
-		square[i][j] = '\0';
-		i++;
+			square[i][j++] = '.';
+		square[i++][j] = '\0';
 	}
 	return (square);
 }
@@ -64,7 +54,7 @@ void		print_square(char **square)
 	}
 }
 
-void		free_square(char **square, size_t square_size)
+void		*free_square(char **square, size_t square_size)
 {
 	size_t		i;
 
@@ -79,4 +69,5 @@ void		free_square(char **square, size_t square_size)
 		}
 		free(square);
 	}
+	return (NULL);
 }

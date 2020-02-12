@@ -6,7 +6,7 @@
 /*   By: ggeordi <ggeordi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 15:32:18 by ggeordi           #+#    #+#             */
-/*   Updated: 2020/02/11 00:10:18 by ggeordi          ###   ########.fr       */
+/*   Updated: 2020/02/12 23:40:41 by ggeordi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,15 +69,32 @@ int			line_is_valid(char *line, int counter)
 	return (1);
 }
 
-t_list		*save_tetromino(t_tetromino *tetromino, t_list *tetrominoes)
+t_list		*save_tetromino(t_list *tetrominoes, int *amount_of_tetrominoes,
+							char *buf, int i)
 {
 	t_list				*next_tetrimino;
+	t_tetromino			*tetromino;
 
+	if (!(line_is_valid(buf, i))
+	|| *(amount_of_tetrominoes) == 26
+	|| !(tetromino = new_tetromino(
+			buf, 'A' + (*amount_of_tetrominoes))))
+	{
+		if (tetrominoes)
+			ft_lstdel(&tetrominoes, free_tetromino);
+		return (NULL);
+	}
 	next_tetrimino = tetrominoes;
-	tetrominoes = (t_list*)malloc(sizeof(t_list));
+	if (!(tetrominoes = (t_list*)malloc(sizeof(t_list))))
+	{
+		free_tetromino(tetromino, sizeof(tetromino));
+		ft_lstdel(&next_tetrimino, free_tetromino);
+		return (NULL);
+	}
 	tetrominoes->content = tetromino;
 	tetrominoes->content_size = sizeof(tetromino);
 	tetrominoes->next = next_tetrimino;
+	(*amount_of_tetrominoes)++;
 	return (tetrominoes);
 }
 
@@ -85,7 +102,6 @@ t_list		*read_tetri(int fd, int *amount_of_tetrominoes)
 {
 	int				i;
 	int				last_i;
-	t_tetromino		*tetromino;
 	t_list			*tetrominoes;
 	char			buf[21];
 
@@ -93,24 +109,14 @@ t_list		*read_tetri(int fd, int *amount_of_tetrominoes)
 	last_i = 0;
 	while ((i = read(fd, &buf[0], 21)) >= 20)
 	{
-		if (!(line_is_valid(&buf[0], i))
-		|| *(amount_of_tetrominoes) == 26
-		|| !(tetromino = new_tetromino(
-				&buf[0], 'A' + (*amount_of_tetrominoes))))
-		{
-			if (tetrominoes)
-				ft_lstdel(&tetrominoes, free_tetromino);
+		if (!(tetrominoes = save_tetromino(tetrominoes,
+		amount_of_tetrominoes, &buf[0], i)))
 			return (NULL);
-		}
-		if (!(tetrominoes = save_tetromino(tetromino, tetrominoes)))
-			return (NULL);
-		(*amount_of_tetrominoes)++;
 		last_i = i;
 	}
 	if (i == -1 || i > 0 || last_i == 0 || last_i == 21)
 	{
-		if (tetrominoes)
-			ft_lstdel(&tetrominoes, free_tetromino);
+		ft_lstdel(&tetrominoes, free_tetromino);
 		return (NULL);
 	}
 	ft_lstrev(&tetrominoes);

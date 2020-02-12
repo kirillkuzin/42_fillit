@@ -6,7 +6,7 @@
 /*   By: ggeordi <ggeordi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 20:15:27 by ggeordi           #+#    #+#             */
-/*   Updated: 2020/02/11 00:06:54 by ggeordi          ###   ########.fr       */
+/*   Updated: 2020/02/12 23:57:30 by ggeordi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,6 @@ t_tetromino		*new_tetromino(char *tetromino_str, char letter)
 	if (!(tetromino = (t_tetromino*)malloc(sizeof(t_tetromino))))
 		return (NULL);
 	if (!(tetromino->body = new_square(4)))
-	{
-		free_tetromino(tetromino, sizeof(tetromino));
-		return (NULL);
-	}
-	if (!tetromino->body)
 	{
 		free_tetromino(tetromino, sizeof(tetromino));
 		return (NULL);
@@ -94,10 +89,9 @@ void			free_tetromino(void *tetromino_content, size_t tetromino_size)
 	tetromino = (t_tetromino*)tetromino_content;
 	i = tetromino_size;
 	i = 0;
-	while (i < 4)
+	if (tetromino)
 	{
-		free(tetromino->body[i]);
-		i++;
+		free_square(tetromino->body, 4);
+		ft_memdel((void**)&tetromino);
 	}
-	ft_memdel((void**)&tetromino);
 }

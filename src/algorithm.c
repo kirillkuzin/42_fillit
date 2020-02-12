@@ -6,7 +6,7 @@
 /*   By: ggeordi <ggeordi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/19 15:07:12 by kirillkuzin       #+#    #+#             */
-/*   Updated: 2020/02/11 00:05:50 by ggeordi          ###   ########.fr       */
+/*   Updated: 2020/02/12 23:42:45 by ggeordi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,109 +17,53 @@ char				**algorithm(t_list *list_of_tetrominoes, \
 {
 	t_tetromino		*tetromino;
 	char			**filled_square;
-	int				i;
-	int				j;
+	t_point			*point;
 
-	i = 0;
+	point = create_point();
 	tetromino = list_of_tetrominoes->content;
-	while (square[i])
+	while (square[point->i])
 	{
-		j = 0;
-		while (square[i][j])
+		point->j = 0;
+		while (square[point->i][point->j])
 		{
-			if (square[i][j] == '.')
+			if (square[point->i][point->j] == '.')
 			{
-				if (check_fit_tetromino(square, i, j, tetromino, first))
-				{
-					paste_tetromino(square, i, j, tetromino, first);
-					if (!list_of_tetrominoes->next)
-						return (square);
-					filled_square = algorithm(list_of_tetrominoes->next, square, 0);
-					if (!filled_square)
-						remove_tetromino(square, i, j, tetromino, first);
-					else
-						return (filled_square);
-				}
+				if (first == 1)
+					tetromino->x_shift = 0;
+				if ((filled_square = algorithm_body(list_of_tetrominoes,
+				tetromino, square, point)))
+					return (filled_square);
 			}
-			j++;
+			point->j++;
 		}
-		i++;
+		point->i++;
 	}
+	free_point(point);
 	return (NULL);
 }
 
-int					check_fit_tetromino(char **square, int i, int j, t_tetromino *tetromino, int first)
+char				**algorithm_body(t_list *list_of_tetrominoes,
+									t_tetromino *tetromino, char **square,
+									t_point *point)
 {
-	int				h;
-	int				w;
+	char			**filled_square;
 
-	h = 0;
-	while (tetromino->body[h][0] != '\0')
+	if (check_fit_tetromino(square, point->i, point->j, tetromino))
 	{
-		w = 0;
-		while (tetromino->body[h][w] != '\0')
+		paste_tetromino(square, point->i, point->j, tetromino);
+		if (!list_of_tetrominoes->next)
 		{
-			if (first == 1)
-			{
-				if (tetromino->body[h][w] != '.' && square[i + h][j + w] != '.')
-					return (0);
-			}
-			else
-			{
-				if (tetromino->body[h][w] != '.' && square[i + h][j + w - tetromino->x_shift] != '.')
-					return (0);
-			}
-			w++;
+			free_point(point);
+			return (square);
 		}
-		h++;
-	}
-	return (1);
-}
-
-void				paste_tetromino(char **square, int i, int j, t_tetromino *tetromino, int first)
-{
-	int				h;
-	int				w;
-
-	h = 0;
-	while (tetromino->body[h][0] != '\0')
-	{
-		w = 0;
-		while (tetromino->body[h][w] != '\0')
+		filled_square = algorithm(list_of_tetrominoes->next, square, 0);
+		if (!filled_square)
+			remove_tetromino(square, point->i, point->j, tetromino);
+		else
 		{
-			if (tetromino->body[h][w] != '.')
-			{
-				if (first == 1)
-					square[i + h][j + w] = tetromino->body[h][w];
-				else
-					square[i + h][j + w - tetromino->x_shift] = tetromino->body[h][w];
-			}
-			w++;
+			free_point(point);
+			return (filled_square);
 		}
-		h++;
 	}
-}
-
-void				remove_tetromino(char **square, int i, int j, t_tetromino *tetromino, int first)
-{
-	int				h;
-	int				w;
-
-	h = 0;
-	while (tetromino->body[h][0] != '\0')
-	{
-		w = 0;
-		while (tetromino->body[h][w] != '\0')
-		{
-			if (tetromino->body[h][w] != '.')
-			{
-				if (first == 1)
-					square[i + h][j + w] = '.';
-				else
-					square[i + h][j + w - tetromino->x_shift] = '.';
-			}
-			w++;
-		}
-		h++;
-	}
+	return (NULL);
 }
